@@ -8,6 +8,8 @@ const config = {
   otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
 };
 
+app.use(require("cors")());
+
 app.use("*", function (req, res) {
   const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = config.baseURL;
@@ -16,12 +18,11 @@ app.use("*", function (req, res) {
   }
 
   console.log(`[${req.method}] ${url.substr(0, 60)}...`);
-  console.log(req.headers);
-
   let headers = req.headers;
 
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];
+  headers["host"] && delete headers["host"];
   console.log(headers);
 
   fetch(`${req.protocol}://${url}`, {

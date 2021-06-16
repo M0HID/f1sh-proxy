@@ -16,9 +16,17 @@ app.use("*", function (req, res) {
   }
 
   console.log(`[${req.method}] ${url.substr(0, 60)}...`);
+  console.log(JSON.stringify(req.headers));
+
+  let headers = JSON.stringify(req.headers);
+
+  headers["origin"] && delete headers["origin"];
+  headers["referer"] && delete headers["referer"];
+  console.log(headers);
+
   fetch(`${req.protocol}://${url}`, {
     method: req.method,
-    headers: { "User-Agent": req.headers["user-agent"] },
+    headers,
   })
     .then((res) => res.blob())
     .then((body) => {

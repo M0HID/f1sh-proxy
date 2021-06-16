@@ -47,7 +47,7 @@
 
       function loadURL() {
          const iframe = document.querySelector("iframe");
-         const value = document.querySelector(".urlBox").value;
+         const value = document.querySelector(".urlBox").value.replace(/(https|http):\/\//g, "");
          document.querySelector(".loader").style.display = "flex";
          document.querySelector(".loaderURL").innerText = value;
          iframe.style.display = "none";
@@ -55,8 +55,9 @@
          const domain = value.split("/")[0];
          let extra = value.split("/");
          extra.shift();
+         
          const protocol = value.includes('https://') || value.includes('http://') ? '' : 'https://'
-         iframe.src = protocol + domain.replace(/\./g, "_") + '.f1shproxy.ml' + extra;
+         iframe.src = protocol + domain.replace(/\./g, "_") + '.f1shproxy.ml' + extra.join("/");
       }
    </script>
 </body>

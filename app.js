@@ -7,10 +7,12 @@ const config = {
 };
 
 app.use("*", function (req, res) {
-  console.log(req.get("host"));
-  var date = new Date().toISOString().substr(11, 8);
+  const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
+  console.log(remoteHost);
+
   var url = config.baseURL + req.originalUrl;
-  logger(date, req.ip, url);
+
+  console.log(`[${req.method}] ${url.substr(0, 60)}...`);
   fetch(url, {
     method: req.method,
     headers: { "User-Agent": req.headers["user-agent"] },
@@ -23,14 +25,6 @@ app.use("*", function (req, res) {
       });
     });
 });
-
-function logger(date, ip, url) {
-  if (url.length > 60) {
-    console.log(`[-] [${date}] ${ip} => ${url.substr(0, 60)}...`);
-  } else {
-    console.log(`[-] [${date}] ${ip} => ${url}`);
-  }
-}
 
 module.exports = app;
 

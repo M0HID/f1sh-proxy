@@ -23,7 +23,6 @@ app.use("*", function (req, res) {
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];
   headers["host"] && delete headers["host"];
-  console.log(headers);
 
   fetch(`${req.protocol}://${url}`, {
     method: req.method,

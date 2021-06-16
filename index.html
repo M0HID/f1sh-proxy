@@ -7,6 +7,11 @@
       * {
          @apply m-0;
       }
+
+      iframe {
+         width: 95vw;
+         height: 90vh;
+      }
    </style>
 </head>
 
@@ -21,7 +26,7 @@
       <iframe
          sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-top-navigation allow-top-navigation-by-user-activation"
          src="https://google_com.f1shproxy.ml"
-         class="hidden bg-black border-none h-screen w-11/12 p-0 m-0 lg:w-10/12 shadow-lg mt-4 mb-4"
+         class="hidden bg-black border-none w-full shadow-lg mt-4 mb-4"
          onload="loaded();"></iframe>
       </input>
    </div>
@@ -44,7 +49,7 @@
       function loadURL() {
          const iframe = document.querySelector("iframe");
          const value = document.querySelector(".urlBox").value;
-         document.querySelector(".loader").style.display = "block";
+         document.querySelector(".loader").style.display = "flex";
          document.querySelector(".loaderURL").innerText = value;
          iframe.style.display = "none";
          iframe.src = 'https://' + value.replace(/\./g, "_") + '.f1shproxy.ml';

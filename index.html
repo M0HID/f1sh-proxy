@@ -47,7 +47,7 @@
          document.querySelector(".loader").style.display = "block";
          document.querySelector(".loaderURL").innerText = value;
          iframe.style.display = "none";
-         iframe.src = value.replace(/\./g, "_") + '.f1shproxy.ml';
+         iframe.src = 'https://' + value.replace(/\./g, "_") + '.f1shproxy.ml';
       }
    </script>
 </body>

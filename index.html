@@ -51,7 +51,12 @@
          document.querySelector(".loader").style.display = "flex";
          document.querySelector(".loaderURL").innerText = value;
          iframe.style.display = "none";
-         iframe.src = 'https://' + value.replace(/\./g, "_") + '.f1shproxy.ml';
+         
+         const domain = value.split("/")[0];
+         let extra = value.split("/");
+         extra.shift();
+
+         iframe.src = 'https://' + domain.replace(/\./g, "_") + 'f1shproxy.ml' + extra;
       }
    </script>
 </body>

@@ -55,8 +55,8 @@
          const domain = value.split("/")[0];
          let extra = value.split("/");
          extra.shift();
-
-         iframe.src = 'https://' + domain.replace(/\./g, "_") + 'f1shproxy.ml' + extra;
+         const protocol = value.includes('https://') || value.includes('http://') ? '' : 'https://'
+         iframe.src = protocol + domain.replace(/\./g, "_") + '.f1shproxy.ml' + extra;
       }
    </script>
 </body>

@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "vercel dev",
-    "test": "jest -i"
+    "test": "jest -i",
+    "push": "git add . && git commit -m \"too lazy to write a commit message\" && git push"
   },
   "dependencies": {
     "cors": "^2.8.5",

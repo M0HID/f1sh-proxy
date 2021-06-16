@@ -57,7 +57,7 @@
          extra.shift();
          
          const protocol = value.includes('https://') || value.includes('http://') ? '' : 'https://'
-         iframe.src = protocol + domain.replace(/\./g, "_") + '.f1shproxy.ml' + extra.join("/");
+         iframe.src = protocol + domain.replace(/\./g, "_") + '.f1shproxy.ml' + '/' + extra.join("/");
       }
    </script>
 </body>

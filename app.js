@@ -17,7 +17,6 @@ app.use("*", function (req, res) {
     url = remoteHost + req.originalUrl;
   }
 
-  console.log(`[${req.method}] ${url.substr(0, 60)}...`);
   let headers = req.headers;
 
   headers["origin"] && delete headers["origin"];
@@ -35,6 +34,8 @@ app.use("*", function (req, res) {
         res.send(Buffer.from(buf));
       });
     });
+
+  console.log(`[${req.method}] ${url}`);
 });
 
 module.exports = app;

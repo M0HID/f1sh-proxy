@@ -1,53 +1,55 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
-      <style>
-         * {
+
+<head>
+   <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+   <style>
+      * {
          @apply m-0;
-         }
-      </style>
-   </head>
-   <body class="h-screen">
-      <div class="w-screen flex flex-col justify-center items-center">
-         <div class="flex flex-row justify-center items-center w-10/12 lg:w-8/12"> 
-            <input placeholder="Enter URL here!" type="url" name="url" class="flex-grow urlBox font-mono mx-4 pl-4 bg-gray-200 h-8 mt-4 rounded-md shadow-md hover:shadow-lg focus:shadow-xl focus:bg-gray-300 border-none outline-none transition duration-200 ease-in-out">
-            <button onclick="loadURL();" class="rounded-md shadow-md bg-green-500 hover:bg-green-600 text-white outline-none border-none focus:outline-none focus:border-none h-8 mt-4 mr-4 px-4 transition duration-200 ease-in-out">Load</button>
-        </div>
-         <iframe
-            sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-top-navigation allow-top-navigation-by-user-activation"
-            src="https://google_com.f1shproxy.ml"
-            class="hidden bg-black border-none h-screen w-11/12 p-0 m-0 lg:w-10/12 shadow-lg mt-4 mb-4"
-            onload="loaded();"></iframe>
-         </input>
-      </div>
-      <div class="w-screen flex items-center justify-center text-6xl m-0 p-0 flex-col loader mt-16">
-         <svg class="animate-spin h-20 w-20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor"
-               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-            </path>
-         </svg>
-         <h1 class="font-mono mt-8 text-gray-600 text-base loaderURL">google.com</h1>
-      </div>
-      <script>
-         function loaded() {
-             document.querySelector(".loader").style.display = "none";
-             document.querySelector("iframe").style.display = "block";
-             document.querySelector(".urlBox").value = "google.com";
-         }
+      }
+   </style>
+</head>
 
-         function loadURL() {
-            const iframe = document.querySelector("iframe");
-            const value = document.querySelector(".urlBox").value;
-            
-            document.querySelector(".loader").style.display = "block";
-            document.querySelector(".loaderURL").innerText = value;
-             iframe.style.display = "none";
-             iframe.src = value;
-             
+<body class="h-screen">
+   <div class="w-screen flex flex-col justify-center items-center">
+      <div class="flex flex-row justify-center items-center w-10/12 lg:w-8/12">
+         <input placeholder="Enter URL here!" type="url" name="url"
+            class="flex-grow urlBox font-mono mx-4 pl-4 bg-gray-200 h-8 mt-4 rounded-md shadow-md hover:shadow-lg focus:shadow-xl focus:bg-gray-300 border-none outline-none transition duration-200 ease-in-out">
+         <button onclick="loadURL();"
+            class="rounded-md shadow-md bg-green-500 hover:bg-green-600 text-white outline-none border-none focus:outline-none focus:border-none h-8 mt-4 mr-4 px-4 transition duration-200 ease-in-out">Load</button>
+      </div>
+      <iframe
+         sandbox="allow-same-origin allow-scripts allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-top-navigation allow-top-navigation-by-user-activation"
+         src="https://google_com.f1shproxy.ml"
+         class="hidden bg-black border-none h-screen w-11/12 p-0 m-0 lg:w-10/12 shadow-lg mt-4 mb-4"
+         onload="loaded();"></iframe>
+      </input>
+   </div>
+   <div class="w-screen flex items-center justify-center text-6xl m-0 p-0 flex-col loader mt-16">
+      <svg class="animate-spin h-20 w-20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+         <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+         </path>
+      </svg>
+      <h1 class="font-mono mt-8 text-gray-600 text-base loaderURL">google.com</h1>
+   </div>
+   <script>
+      function loaded() {
+         document.querySelector(".loader").style.display = "none";
+         document.querySelector("iframe").style.display = "block";
+         document.querySelector(".urlBox").value = "google.com";
+      }
 
-         }
-      </script>
-   </body>
+      function loadURL() {
+         const iframe = document.querySelector("iframe");
+         const value = document.querySelector(".urlBox").value;
+         document.querySelector(".loader").style.display = "block";
+         document.querySelector(".loaderURL").innerText = value;
+         iframe.style.display = "none";
+         iframe.src = value.replace(/\./g, "_") + '.f1shproxy.ml';
+      }
+   </script>
+</body>
+
 </html>

@@ -16,9 +16,9 @@ app.use("*", function (req, res) {
   }
 
   console.log(`[${req.method}] ${url.substr(0, 60)}...`);
-  console.log(JSON.stringify(req.headers));
+  console.log(req.headers);
 
-  let headers = JSON.stringify(req.headers);
+  let headers = req.headers;
 
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];

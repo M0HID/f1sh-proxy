@@ -3,13 +3,14 @@ const fetch = require("node-fetch");
 
 const config = {
   port: 3000,
-  baseURL: "http://old.reddit.com",
+  baseURL: "https://old.reddit.com",
   host: "f1shproxy",
   otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
 };
 
 app.use("*", function (req, res) {
-  const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
+  const remoteHost =
+    req.protocol + "://" + req.get("host").split(".")[0].replace(/_/g, ".");
   let url = config.baseURL;
   if (remoteHost != config.host && remoteHost != config.otherHost) {
     url = remoteHost + req.originalUrl;

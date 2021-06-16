@@ -1,10 +1,10 @@
-const { resolve } = path;
+const { resolve } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
 
 const config = {
   port: 3000,
-  baseURL: "old.reddit.com",
+  baseURL: "browser.f1shproxy.ml",
   host: "f1shproxy",
   otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
 };

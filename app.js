@@ -16,10 +16,10 @@ app.use("*", function (req, res) {
   let url = config.baseURL;
 
   if (remoteHost == "browser") return res.sendFile(resolve("index.html"));
+  else if (remoteHost == "anime") url = "vidsteaming.io";
   else if (remoteHost != config.host && remoteHost != config.otherHost) {
     url = remoteHost + req.originalUrl;
   }
-
   let headers = req.headers;
 
   headers["origin"] && delete headers["origin"];

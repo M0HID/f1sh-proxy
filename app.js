@@ -25,7 +25,7 @@ app.use("*", function (req, res) {
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];
   headers["host"] && delete headers["host"];
-
+console.log([url, req.protocol, remoteHost]);
   fetch(`${req.protocol}://${url}`, {
     method: req.method,
     headers,

@@ -50,7 +50,7 @@ app.use("*", function (req, res) {
       console.log(body.type);
 
       // rewrite html to use our proxy on any urls
-      if (body.type == "text/html") {
+      if (body.type.split(";")[0] == "text/html") {
         body.text().then((html) => res.send(rewriteHTML(html, remote, config)));
       } else {
         body.arrayBuffer().then((buf) => {

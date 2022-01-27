@@ -29,7 +29,7 @@ app.use("*", (req, res) => {
   const remote = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = rewrite.default;
 
-  console.log(remote, url, req.originalUrl);
+  console.log(remote, url, req.originalUrl, req.get("host"));
 
   if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
   else if (remote == "origin_rewrite") return rewriteOrigin(req, res, remote);

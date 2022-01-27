@@ -13,7 +13,7 @@ app.use(require("cors")());
 
 app.use("*", function (req, res) {
   const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
-  let url = "";
+  let url = config.baseURL;
 
   if (remoteHost == "browser") return res.sendFile(resolve("index.html"));
   else if (remoteHost != config.host && remoteHost != config.otherHost)

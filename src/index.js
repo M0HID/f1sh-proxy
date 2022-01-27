@@ -1,4 +1,5 @@
-const l = (p, l) => console.log(`[${p}] ${l}`);
+const l = (p, l) =>
+  console.log(`[${p}] ${typeof l === "object" ? JSON.stringify(l) : l}`);
 
 const { join } = require("path");
 const app = require("express")();

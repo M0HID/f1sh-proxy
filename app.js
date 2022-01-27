@@ -7,9 +7,6 @@ const config = {
   baseURL: "browser.f1shproxy.ml",
   host: "f1shproxy",
   otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
-  redirects: {
-    anime: "gogoplay1.com",
-  },
 };
 
 app.use(require("cors")());
@@ -19,7 +16,6 @@ app.use("*", function (req, res) {
   let url = "";
 
   if (remoteHost == "browser") return res.sendFile(resolve("index.html"));
-  else if (config.redirects[remoteHost]) url = config.redirects[remoteHost];
   else if (remoteHost != config.host && remoteHost != config.otherHost)
     url = remoteHost + req.originalUrl;
 

@@ -32,7 +32,7 @@ app.use("*", (req, res) => {
   console.log(remote, url, req.originalUrl, req.get("host"));
 
   if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
-  else if (remote == "origin_rewrite") return rewriteOrigin(req, res, remote);
+  else if (remote == "origin.rewrite") return rewriteOrigin(req, res, remote);
   else if (remote != hosts.base && remote != hosts.vercel)
     url = remote + req.originalUrl;
 

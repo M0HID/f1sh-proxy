@@ -7,25 +7,30 @@ const config = {
   baseURL: "browser.f1shproxy.ml",
   host: "f1shproxy",
   otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
+  redirects: {
+    anime: "gogoplay1.com",
+  },
 };
 
 app.use(require("cors")());
 
 app.use("*", function (req, res) {
   const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
-  let url = config.baseURL;
+  let url = "";
 
   if (remoteHost == "browser") return res.sendFile(resolve("index.html"));
-  else if (remoteHost == "anime") url = "vidsteaming.io";
-  else if (remoteHost != config.host && remoteHost != config.otherHost) {
+  else if (config.redirects[remoteHost]) url = config.redirects[remoteHost];
+  else if (remoteHost != config.host && remoteHost != config.otherHost)
     url = remoteHost + req.originalUrl;
-  }
+
   let headers = req.headers;
 
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];
   headers["host"] && delete headers["host"];
-console.log([url, req.protocol, remoteHost]);
+
+  process.env.DEBUG && console.log([req.method, url, req.protocol, remoteHost]);
+
   fetch(`${req.protocol}://${url}`, {
     method: req.method,
     headers,
@@ -37,8 +42,6 @@ console.log([url, req.protocol, remoteHost]);
         res.send(Buffer.from(buf));
       });
     });
-
-  console.log(`[${req.method}] ${url}`);
 });
 
 module.exports = app;

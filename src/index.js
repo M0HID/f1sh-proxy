@@ -87,17 +87,9 @@ const rewriteOrigin = (req, res, remote) => {
     headers,
   })
     .then((res) => res.blob())
-    .then((body) => {
-      res.type(body.type);
-      console.log(url, body.type);
-
-      // rewrite html to use our proxy on any urls
-      if (body.type.split(";")[0] == "text/html") {
-        body.text().then((html) => res.send(rewriteHTML(html, remote, config)));
-      } else {
-        body.arrayBuffer().then((buf) => {
-          res.send(Buffer.from(buf));
-        });
-      }
-    });
+    .then((body) =>
+      body.arrayBuffer().then((buf) => {
+        res.send(Buffer.from(buf));
+      })
+    );
 };

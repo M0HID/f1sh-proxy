@@ -1,32 +1,44 @@
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
-
+const rewriteHTML = require("./util/rewriteHTML");
 const config = {
   port: 3000,
-  baseURL: "browser.f1shproxy.ml",
   host: "f1shproxy",
-  otherHost: process.env.VERCEL_URL.split(".")[0].replace(/_/g, "."),
+  rewrite: {
+    // default url to send all <>.fp.ml requests to
+    default: "browser.f1shproxy.ml",
+    // base url
+    normal: "f1shproxy.ml",
+    // origin rewrite url
+    origin: `origin_rewrite.f1shproxy.ml`,
+  },
+  hosts: {
+    base: "f1shproxy",
+    vercel: process.env.VERCEL
+      ? process.env.VERCEL_URL.split(".")[0].replace(/_/g, ".")
+      : "",
+  },
 };
 
 app.use(require("cors")());
 
 app.use("*", function (req, res) {
-  const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
-  let url = config.baseURL;
+  const { rewrite, hosts } = config;
+  // apple_com.f1shproxy.ml => apple.com
+  const remote = req.get("host").split(".")[0].replace(/_/g, ".");
+  let url = rewrite.default;
 
-  if (remoteHost == "browser")
-    return res.sendFile(join(__dirname, "index.html"));
-  else if (remoteHost != config.host && remoteHost != config.otherHost)
-    url = remoteHost + req.originalUrl;
+  if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
+  else if (remote != hosts.base && remote != hosts.vercel)
+    url = remote + req.originalUrl;
 
   let headers = req.headers;
-
   headers["origin"] && delete headers["origin"];
   headers["referer"] && delete headers["referer"];
   headers["host"] && delete headers["host"];
 
-  process.env.DEBUG && console.log([req.method, url, req.protocol, remoteHost]);
+  process.env.DEBUG && console.log([req.method, url, req.protocol, remote]);
 
   fetch(`${req.protocol}://${url}`, {
     method: req.method,
@@ -35,23 +47,11 @@ app.use("*", function (req, res) {
     .then((res) => res.blob())
     .then((body) => {
       res.type(body.type);
+      console.log(body.type);
 
       // rewrite html to use our proxy on any urls
       if (body.type == "text/html") {
-        const html = body.text().then((html) => {
-          // rewrite any urls such as https://page.com/script.js to http://page_com.f1shproxy.ml/script.js
-          const regex = /(https?:\/\/[^\s]+)/g;
-          const newHtml = html.replace(regex, (match) => {
-            const url = match.split("/")[2];
-            const newUrl = url.replace(
-              /(https?:\/\/)([^\s]+)/,
-              `$1${config.baseURL}/$2`
-            );
-            return newUrl;
-          });
-
-          res.send(newHtml);
-        });
+        body.text().then((html) => res.send(rewriteHTML(html, remote, config)));
       } else {
         body.arrayBuffer().then((buf) => {
           res.send(Buffer.from(buf));

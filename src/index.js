@@ -74,7 +74,7 @@ const rewriteOrigin = (req, res, remote) => {
   const url = remote + req.originalUrl;
 
   const origin = url.split("/")[1];
-  const remoteURL = url.split("/").slice(1).join("/");
+  const remoteURL = url.split("/").slice(2).join("/");
   console.log(url);
 
   let headers = req.headers;

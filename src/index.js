@@ -89,9 +89,10 @@ const rewriteOrigin = (req, res, remote) => {
     headers,
   })
     .then((res) => res.blob())
-    .then((body) =>
+    .then((body) => {
+      res.type(body.type);
       body.arrayBuffer().then((buf) => {
         res.send(Buffer.from(buf));
-      })
-    );
+      });
+    });
 };

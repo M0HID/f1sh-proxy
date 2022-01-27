@@ -73,12 +73,31 @@ const rewriteOrigin = (req, res, remote) => {
   const { rewrite } = config;
   const url = remote + req.originalUrl;
 
+  const origin = url.split("/")[1];
+  const remoteURL = url.split("/").slice(1).join("/");
   console.log(url);
 
   let headers = req.headers;
-  headers["origin"] && (headers["origin"] = `${req.protocol}://${remote}`);
-  headers["referer"] && (headers["referer"] = `${req.protocol}://${url}`);
-  headers["host"] && delete headers["host"];
+  headers["origin"] = `${req.protocol}://${origin}`;
+  headers["referer"] = `${req.protocol}://${origin}`;
+  headers["host"] = `${req.protocol}://${origin}`;
 
-  res.send("uwu");
+  fetch(`${req.protocol}://${remoteURL}`, {
+    method: req.method,
+    headers,
+  })
+    .then((res) => res.blob())
+    .then((body) => {
+      res.type(body.type);
+      console.log(url, body.type);
+
+      // rewrite html to use our proxy on any urls
+      if (body.type.split(";")[0] == "text/html") {
+        body.text().then((html) => res.send(rewriteHTML(html, remote, config)));
+      } else {
+        body.arrayBuffer().then((buf) => {
+          res.send(Buffer.from(buf));
+        });
+      }
+    });
 };

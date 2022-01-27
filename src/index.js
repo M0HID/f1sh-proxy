@@ -34,9 +34,28 @@ app.use("*", function (req, res) {
     .then((res) => res.blob())
     .then((body) => {
       res.type(body.type);
-      body.arrayBuffer().then((buf) => {
-        res.send(Buffer.from(buf));
-      });
+
+      // rewrite html to use our proxy on any urls
+      if (body.type == "text/html") {
+        const html = body.text().then((html) => {
+          // rewrite any urls such as https://page.com/script.js to http://page_com.f1shproxy.ml/script.js
+          const regex = /(https?:\/\/[^\s]+)/g;
+          const newHtml = html.replace(regex, (match) => {
+            const url = match.split("/")[2];
+            const newUrl = url.replace(
+              /(https?:\/\/)([^\s]+)/,
+              `$1${config.baseURL}/$2`
+            );
+            return newUrl;
+          });
+
+          res.send(newHtml);
+        });
+      } else {
+        body.arrayBuffer().then((buf) => {
+          res.send(Buffer.from(buf));
+        });
+      }
     });
 });
 

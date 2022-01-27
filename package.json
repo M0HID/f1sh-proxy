@@ -1,26 +1,15 @@
 {
-  "name": "express-vercel",
-  "version": "0.5.0",
-  "description": "express vercel boilerplate",
-  "main": "app.js",
+  "name": "f1shproxy",
+  "version": "1.0.0",
+  "description": "simple proxy thingy for vercel",
+  "main": "src/index.js",
   "scripts": {
     "start": "vercel dev",
-    "test": "jest -i",
     "push": "git add . && git commit -m \"too lazy to write a commit message\" && git push"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
-  },
-  "keywords": [
-    "vercel"
-  ],
-  "author": "Kizito Akhilome <kizito@akhilo.me>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "jest": "^27.0.3",
-    "supertest": "^6.1.3"
   }
 }

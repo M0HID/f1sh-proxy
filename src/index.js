@@ -82,6 +82,8 @@ const rewriteOrigin = (req, res, remote) => {
   headers["referer"] = `${req.protocol}://${origin}`;
   headers["host"] = `${req.protocol}://${origin}`;
 
+  console.log(remoteURL, origin, headers, url);
+
   fetch(`${req.protocol}://${remoteURL}`, {
     method: req.method,
     headers,

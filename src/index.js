@@ -47,7 +47,7 @@ app.use("*", function (req, res) {
     .then((res) => res.blob())
     .then((body) => {
       res.type(body.type);
-      console.log(body.type);
+      console.log(url, body.type);
 
       // rewrite html to use our proxy on any urls
       if (body.type.split(";")[0] == "text/html") {

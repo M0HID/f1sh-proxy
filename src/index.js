@@ -1,3 +1,5 @@
+const l = (p, l) => console.log(`[${p}] ${l}`);
+
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
@@ -28,8 +30,6 @@ app.use("*", (req, res) => {
   // apple_com.f1shproxy.ml => apple.com
   const remote = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = rewrite.default;
-
-  console.log(remote, url, req.originalUrl, req.get("host"));
 
   if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
   else if (remote == "origin.rewrite") return rewriteOrigin(req, res, remote);
@@ -82,7 +82,9 @@ const rewriteOrigin = (req, res, remote) => {
   headers["referer"] = `${req.protocol}://${origin}`;
   headers["host"] = `${req.protocol}://${origin}`;
 
-  console.log([remoteURL, origin, headers, url].join("\n"));
+  l("fetching", `${req.protocol}://${remoteURL}`);
+  l("origin", `${req.protocol}://${origin}`);
+  l("headers", headers);
 
   fetch(`${req.protocol}://${remoteURL}`, {
     method: req.method,

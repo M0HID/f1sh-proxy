@@ -1,3 +1,4 @@
+const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
 
@@ -14,7 +15,8 @@ app.use("*", function (req, res) {
   const remoteHost = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = config.baseURL;
 
-  if (remoteHost == "browser") return res.sendFile("index.html");
+  if (remoteHost == "browser")
+    return res.sendFile(join(__dirname, "index.html"));
   else if (remoteHost != config.host && remoteHost != config.otherHost)
     url = remoteHost + req.originalUrl;
 

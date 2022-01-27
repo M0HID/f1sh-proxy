@@ -23,19 +23,20 @@ const config = {
 
 app.use(require("cors")());
 
-app.use("*", function (req, res) {
+app.use("*", (req, res) => {
   const { rewrite, hosts } = config;
   // apple_com.f1shproxy.ml => apple.com
   const remote = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = rewrite.default;
 
   if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
+  else if (remote == "origin_rewrite") return rewriteOrigin(req, res, remote);
   else if (remote != hosts.base && remote != hosts.vercel)
     url = remote + req.originalUrl;
 
   let headers = req.headers;
-  headers["origin"] && delete headers["origin"];
-  headers["referer"] && delete headers["referer"];
+  headers["origin"] && (headers["origin"] = `${req.protocol}://${remote}`);
+  headers["referer"] && (headers["referer"] = `${req.protocol}://${url}`);
   headers["host"] && delete headers["host"];
 
   process.env.DEBUG && console.log([req.method, url, req.protocol, remote]);
@@ -66,3 +67,16 @@ module.exports = app;
 //   console.clear();
 //   console.log(`[!] Proxy Started at http://localhost:${config.port}`);
 // });
+const rewriteOrigin = (req, res, remote) => {
+  const { rewrite } = config;
+  const url = remote + req.originalUrl;
+
+  console.log(url);
+
+  let headers = req.headers;
+  headers["origin"] && (headers["origin"] = `${req.protocol}://${remote}`);
+  headers["referer"] && (headers["referer"] = `${req.protocol}://${url}`);
+  headers["host"] && delete headers["host"];
+
+  res.send("uwu");
+};

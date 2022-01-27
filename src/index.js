@@ -29,6 +29,8 @@ app.use("*", (req, res) => {
   const remote = req.get("host").split(".")[0].replace(/_/g, ".");
   let url = rewrite.default;
 
+  console.log(remote, url, req.originalUrl);
+
   if (remote == "browser") return res.sendFile(join(__dirname, "index.html"));
   else if (remote == "origin_rewrite") return rewriteOrigin(req, res, remote);
   else if (remote != hosts.base && remote != hosts.vercel)

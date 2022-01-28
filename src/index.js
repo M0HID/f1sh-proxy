@@ -50,12 +50,27 @@ app.use("*", (req, res) => {
   log(fixedOrigin, "fixedOrigin");
   log(headers, "sending headers");
 
-  fetch(`${remoteHref}${ogURL}`, {
+  return followFetch(`${remoteHref}${ogURL}`, res, {
     method: req.method,
     headers,
     body: req.body || null,
-  })
+    redirect: "manual",
+  });
+});
+
+const followFetch = async (url, res, config) =>
+  await fetch(url, { ...config, redirect: "manual" })
     .then((r) => {
+      // check if response is opaqueredirect and if so set host headers then re-fetch
+      if ((r.status === 302 || r.status === 301) && r.headers.get("location")) {
+        return followFetch(r.headers.get("location"), res, {
+          ...config,
+          headers: {
+            ...config.headers,
+            host: r.headers.get("location").split("/")[2],
+          },
+        });
+      }
       res.set(cleanResHeaders(Object.fromEntries(r.headers.entries())));
       return r.blob();
     })
@@ -63,6 +78,5 @@ app.use("*", (req, res) => {
       res.type(body.type);
       body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));
     });
-});
 
 module.exports = app;

@@ -7,7 +7,7 @@ app.use(require("cors")());
 let { hosts, resolvers } = {
   hosts: ["f1shproxy.ml"],
   resolvers: {
-    browser: (res) => res.sendFile(join(__dirname, "index.html")),
+    browser: (req, res) => res.sendFile(join(__dirname, "index.html")),
   },
 };
 
@@ -22,6 +22,7 @@ app.use("*", (req, res) => {
 
   if (remote == host.split(".")[0]) return resolvers.browser(req, res);
   if (remote == "browser") return resolvers.browser(req, res);
+  if (host.split(".").length == 2) return resolvers.browser(req, res);
 
   const fixedOrigin = remote.endsWith("_or");
 

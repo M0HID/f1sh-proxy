@@ -42,7 +42,7 @@ app.use("*", (req, res) => {
       ? parseURL(ogURL.split("/")[0])
       : parsedRemote);
   headers.referer && (headers.referer = `${remoteHref}${ogURL}`);
-  headers.host && (headers.host = remoteHref);
+  headers.host = remoteHref;
 
   log(headers, "fetch headers");
   fetch(`${remoteHref}${ogURL}`, {

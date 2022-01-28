@@ -1,7 +1,8 @@
 const str = (i) => JSON.stringify(i);
+
 const log = (msg, pf) => {
   const prefix = `[${pf}] ` || "";
-  if (typeof i == "object") console.log(`${prefix}${str(i)}`);
+  if (typeof msg == "object") console.log(`${prefix}${str(msg)}`);
   else console.log(`${prefix}${msg}`);
 };
 

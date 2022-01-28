@@ -1,7 +1,7 @@
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
-const { log, cleanReqHeaders, cleanResHeaders } = require("./util");
+const { log, cleanReqHeaders, cleanResHeaders, parseURL } = require("./util");
 
 app.use(require("cors")());
 

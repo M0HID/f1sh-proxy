@@ -4,7 +4,7 @@ const fetch = require("node-fetch");
 
 app.use(require("cors")());
 
-const { hosts, resolvers } = {
+let { hosts, resolvers } = {
   hosts: ["f1shproxy.ml"],
   resolvers: {
     default: proxyURL,
@@ -13,6 +13,7 @@ const { hosts, resolvers } = {
 };
 
 const parseURL = (u) => u.replace(/_/g, ".");
+process.env.VERCEL && hosts.push(process.env.VERCEL_URL);
 
 app.use("*", (req, res) => {
   const host = req.get("host").split(".").reverse()[1]; // f1shproxy.ml

@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "vercel dev",
-    "push": "git add . && git cz && git push",
+    "push": "yarn dev && git add . && git cz && git push",
     "dev": "node src/index.js"
   },
   "dependencies": {

@@ -29,9 +29,10 @@ app.use("*", (req, res) => {
   plog("remote", remote);
   plog("parsedRemote", parsedRemote);
   plog("ogURL", ogURL);
-  plog("headers", req.headers);
   plog("fetchurl", `${req.protocol}://${parsedRemote}${ogURL}`);
   plog("hosts", hosts);
+  log("\n");
+  plog("headers", req.headers);
 
   if (hosts.includes(host) || host.split(".").length == 2)
     return resolvers.browser(req, res);

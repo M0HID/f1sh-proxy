@@ -26,7 +26,7 @@ app.use("*", (req, res) => {
   if (resolvers[parsedRemote]) return resolvers[parsedRemote](req, res);
 
   const fixedOrigin = remote.endsWith("_or");
-  log("remoteURL", `${req.protocol}://${parsedRemote}${ogURL}`);
+  log(`${req.protocol}://${parsedRemote}${ogURL}`, "remoteURL");
 
   let headers = {
     ...req.headers,
@@ -37,7 +37,7 @@ app.use("*", (req, res) => {
     host: `https://${parsedRemote}`,
   };
 
-  log("fetch headers", headers);
+  log(headers, "fetch headers");
   fetch(`https://${parsedRemote}${ogURL}`, {
     method: req.method,
     headers: cleanReqHeaders(headers),

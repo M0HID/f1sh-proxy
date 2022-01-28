@@ -77,8 +77,7 @@ const followFetch = async (url, res, config) => {
       },
     });
 
-  const headers = cleanGeneralHeaders(Object.fromEntries(r.headers.entries()));
-  res.set(cleanResHeaders(headers));
+  res.set(cleanGeneralHeaders(Object.fromEntries(r.headers.entries())));
   const body = await r.blob();
   res.type(body.type);
   body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));

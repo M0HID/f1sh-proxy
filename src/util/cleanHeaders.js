@@ -21,7 +21,7 @@ const cleanResHeaders = (headers) => {
 };
 
 const cleanGeneralHeaders = (headers) => {
-  let hd = cleanResHeaders(Object.fromEntries(headers));
+  let hd = cleanResHeaders(headers);
   if (hd["content-length"] && hd["transfer-encoding"])
     delete hd["content-length"];
   return hd;

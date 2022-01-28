@@ -45,3 +45,5 @@ app.use("*", (req, res) => {
       body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));
     });
 });
+
+module.exports = app;

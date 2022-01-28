@@ -28,19 +28,19 @@ app.use("*", (req, res) => {
   const fixedOrigin = remote.endsWith("_or");
   log(`${protocol}://${parsedRemote}${ogURL}`, "remoteURL");
 
-  let headers = {
+  let headers = cleanReqHeaders({
     ...req.headers,
-    Origin: fixedOrigin
+    origin: fixedOrigin
       ? parseURL(ogURL.split("/")[0])
       : `${protocol}://${parsedRemote}`,
-    Referer: `${protocol}://${parsedRemote}${ogURL}`,
-    Host: `${protocol}://${parsedRemote}`,
-  };
+    referer: `${protocol}://${parsedRemote}${ogURL}`,
+    host: `${protocol}://${parsedRemote}`,
+  });
 
   log(headers, "fetch headers");
   fetch(`${protocol}://${parsedRemote}${ogURL}`, {
     method: req.method,
-    headers: cleanReqHeaders(headers),
+    headers,
     body: req.body || null,
   })
     .then((r) => {

@@ -33,8 +33,6 @@ app.use("*", (req, res) => {
     ? req.originalUrl.split("/").slice(1).join("/")
     : req.originalUrl;
 
-  log(`${remoteHref}${ogURL}`, "remoteURL");
-
   let headers = cleanReqHeaders(req.headers);
 
   headers.origin &&
@@ -42,7 +40,16 @@ app.use("*", (req, res) => {
   headers.referer && (headers.referer = `${remoteHref}${ogURL}`);
   headers.host = parsedRemote;
 
-  log(headers, "fetch headers");
+  log(`${remoteHref}${ogURL}`, "remoteURL");
+  log(host, "host");
+  log(remote, "remote");
+  log(parsedRemote, "parsedRemote");
+  log(protocol, "protocol");
+  log(ogURL, "ogURL");
+  log(remoteHref, "remoteHref");
+  log(fixedOrigin, "fixedOrigin");
+  log(headers, "sending headers");
+
   fetch(`${remoteHref}${ogURL}`, {
     method: req.method,
     headers,

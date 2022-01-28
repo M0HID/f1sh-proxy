@@ -54,3 +54,24 @@ fetch("https://google.com/", {
     return r.text();
   })
   .then((r) => console.log(r));
+
+const followFetch = (url, res, config) =>
+  fetch(url, { ...config, redirect: "manual" })
+    .then((r) => {
+      // check if response is opaqueredirect and if so set host headers then re-fetch
+      if ((r.status === 302 || r.status === 301) && r.headers.get("location")) {
+        return followFetch(r.headers.get("location"), res, {
+          ...config,
+          headers: {
+            ...config.headers,
+            host: r.headers.get("location").split("/")[2],
+          },
+        });
+      }
+      res.set(cleanResHeaders(Object.fromEntries(r.headers.entries())));
+      return r.blob();
+    })
+    .then((body) => {
+      res.type(body.type);
+      body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));
+    });

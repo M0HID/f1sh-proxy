@@ -1,13 +1,7 @@
-const log = (i) =>
-  typeof i === "array" ? console.log(i.join("\n")) : console.log(i);
-const plog = (p, i) =>
-  log(`[${p}] ${typeof i === "object" ? JSON.stringify(i) : i}`);
-const parseURL = (u) => u.replace(/_/g, ".");
-const encodeURL = (u) => u.replace(/\./g, "_");
-
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
+const { log, cleanReqHeaders, cleanResHeaders } = require("./util");
 
 app.use(require("cors")());
 
@@ -32,24 +26,27 @@ app.use("*", (req, res) => {
   if (resolvers[parsedRemote]) return resolvers[parsedRemote](req, res);
 
   const fixedOrigin = remote.endsWith("_or");
-  plog("remoteURL", `${req.protocol}://${parsedRemote}${ogURL}`);
+  log("remoteURL", `${req.protocol}://${parsedRemote}${ogURL}`);
 
-  const headers = {
+  let headers = {
     ...req.headers,
     origin: fixedOrigin
       ? parseURL(ogURL.split("/")[0])
-      : `${req.protocol}://${parsedRemote}`,
-    referer: `${req.protocol}://${parsedRemote}${ogURL}`,
-    host: `${req.protocol}://${parsedRemote}`,
+      : `https://${parsedRemote}`,
+    referer: `https://${parsedRemote}${ogURL}`,
+    host: `https://${parsedRemote}`,
   };
 
-  plog("fetch headers", headers);
-  fetch(`${req.protocol}://${parsedRemote}${ogURL}`, {
+  log("fetch headers", headers);
+  fetch(`https://${parsedRemote}${ogURL}`, {
     method: req.method,
-    headers,
+    headers: cleanReqHeaders(headers),
     body: req.body || null,
   })
-    .then((r) => r.blob())
+    .then((r) => {
+      res.set(cleanResHeaders(Object.fromEntries(r.headers.entries())));
+      return r.blob();
+    })
     .then((body) => {
       res.type(body.type);
       body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));

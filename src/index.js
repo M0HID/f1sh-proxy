@@ -18,7 +18,8 @@ app.use("*", (req, res) => {
   const host = req.get("host"); // f1shproxy.ml or fp-12.vercel.app
   const remote = req.get("host").split(".")[0]; // google_com or fp-12 or f1shproxy
   const parsedRemote = parseURL(remote); // google.com
-  const { protocol } = req; // path after host such as /waffle?q=21
+  // const { protocol } = req; // path after host such as /waffle?q=21
+  const protocol = "https";
   const remoteHref = `${protocol}://${parsedRemote}`;
 
   if (hosts.includes(host) || host.split(".").length == 2)

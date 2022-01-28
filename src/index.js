@@ -1,3 +1,8 @@
+const log = (i) =>
+  typeof i === "array" ? console.log(i.join("\n")) : console.log(i);
+const plog = (p, i) =>
+  log(`[${p}] ${typeof i === "object" ? JSON.stringify(i) : i}`);
+
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
@@ -19,6 +24,13 @@ app.use("*", (req, res) => {
   const remote = req.get("host").split(".")[0]; //google_com
   const parsedRemote = parseURL(remote);
   const ogURL = req.originalUrl;
+
+  plog("host", host);
+  plog("remote", remote);
+  plog("parsedRemote", parsedRemote);
+  plog("ogURL", ogURL);
+  plog("headers", req.headers);
+  plog("fetchurl", `${req.protocol}://${parsedRemote}${ogURL}`);
 
   if (remote == host.split(".")[0]) return resolvers.browser(req, res);
   if (remote == "browser") return resolvers.browser(req, res);

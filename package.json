@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "vercel dev",
-    "push": "git add . && git commit -m \"too lazy to write a commit message\" && git push",
+    "push": "git add . && git cz && git push",
     "dev": "node src/index.js"
   },
   "dependencies": {
@@ -13,5 +13,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "cz": "^1.8.2"
   }
 }

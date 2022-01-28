@@ -2,6 +2,8 @@ const log = (i) =>
   typeof i === "array" ? console.log(i.join("\n")) : console.log(i);
 const plog = (p, i) =>
   log(`[${p}] ${typeof i === "object" ? JSON.stringify(i) : i}`);
+const parseURL = (u) => u.replace(/_/g, ".");
+const encodeURL = (u) => u.replace(/\./g, "_");
 
 const { join } = require("path");
 const app = require("express")();
@@ -16,7 +18,6 @@ let { hosts, resolvers } = {
   },
 };
 
-const parseURL = (u) => u.replace(/_/g, ".");
 process.env.VERCEL && hosts.push(process.env.VERCEL_URL);
 
 app.use("*", (req, res) => {
@@ -25,21 +26,13 @@ app.use("*", (req, res) => {
   const parsedRemote = parseURL(remote); // google.com
   const ogURL = req.originalUrl; // path after host such as /waffle?q=21
 
-  plog("host", host);
-  plog("remote", remote);
-  plog("parsedRemote", parsedRemote);
-  plog("ogURL", ogURL);
-  plog("fetchurl", `${req.protocol}://${parsedRemote}${ogURL}`);
-  plog("hosts", hosts);
-  log("\n");
-  plog("headers", req.headers);
-
   if (hosts.includes(host) || host.split(".").length == 2)
     return resolvers.browser(req, res);
 
   if (resolvers[parsedRemote]) return resolvers[parsedRemote](req, res);
 
   const fixedOrigin = remote.endsWith("_or");
+  plog("remoteURL", `${req.protocol}://${parsedRemote}${ogURL}`);
 
   const headers = {
     ...req.headers,
@@ -50,6 +43,7 @@ app.use("*", (req, res) => {
     host: `${req.protocol}://${parsedRemote}`,
   };
 
+  plog("fetch headers", headers);
   fetch(`${req.protocol}://${parsedRemote}${ogURL}`, {
     method: req.method,
     headers,

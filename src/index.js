@@ -20,7 +20,7 @@ const parseURL = (u) => u.replace(/_/g, ".");
 process.env.VERCEL && hosts.push(process.env.VERCEL_URL);
 
 app.use("*", (req, res) => {
-  const host = req.get("host").split(".").reverse().slice(-1); // f1shproxy.ml
+  const host = req.get("host").split(".").slice(-1); // f1shproxy.ml
   const remote = req.get("host").split(".")[0]; //google_com
   const parsedRemote = parseURL(remote);
   const ogURL = req.originalUrl;

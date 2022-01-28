@@ -18,7 +18,8 @@ app.use("*", (req, res) => {
   const host = req.get("host"); // f1shproxy.ml or fp-12.vercel.app
   const remote = req.get("host").split(".")[0]; // google_com or fp-12 or f1shproxy
   const parsedRemote = parseURL(remote); // google.com
-  const { originalUrl: ogURL, protocol } = req; // path after host such as /waffle?q=21
+  const remoteHref = `${protocol}://${parsedRemote}`;
+  const { protocol } = req; // path after host such as /waffle?q=21
 
   if (hosts.includes(host) || host.split(".").length == 2)
     return resolvers.browser(req, res);
@@ -26,19 +27,24 @@ app.use("*", (req, res) => {
   if (resolvers[parsedRemote]) return resolvers[parsedRemote](req, res);
 
   const fixedOrigin = remote.endsWith("_or");
-  log(`${protocol}://${parsedRemote}${ogURL}`, "remoteURL");
 
-  let headers = cleanReqHeaders({
-    ...req.headers,
-    origin: fixedOrigin
+  const ogURL = fixedOrigin
+    ? req.originalUrl.split("/").slice(1).join("/")
+    : req.originalUrl;
+
+  log(`${remoteHref}${ogURL}`, "remoteURL");
+
+  let headers = cleanReqHeaders(req.headers);
+
+  headers.origin &&
+    (headers.origin = fixedOrigin
       ? parseURL(ogURL.split("/")[0])
-      : `${protocol}://${parsedRemote}`,
-    referer: `${protocol}://${parsedRemote}${ogURL}`,
-    host: `${protocol}://${parsedRemote}`,
-  });
+      : parsedRemote);
+  headers.referer && (headers.referer = `${remoteHref}${ogURL}`);
+  headers.host && (headers.host = remoteHref);
 
   log(headers, "fetch headers");
-  fetch(`${protocol}://${parsedRemote}${ogURL}`, {
+  fetch(`${remoteHref}${ogURL}`, {
     method: req.method,
     headers,
     body: req.body || null,

@@ -7,7 +7,6 @@ app.use(require("cors")());
 let { hosts, resolvers } = {
   hosts: ["f1shproxy.ml"],
   resolvers: {
-    default: proxyURL,
     browser: (res) => res.sendFile(join(__dirname, "index.html")),
   },
 };

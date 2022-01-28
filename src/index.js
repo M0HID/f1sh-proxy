@@ -20,10 +20,10 @@ const parseURL = (u) => u.replace(/_/g, ".");
 process.env.VERCEL && hosts.push(process.env.VERCEL_URL);
 
 app.use("*", (req, res) => {
-  const host = req.get("host").split(".").slice(-1); // f1shproxy.ml
-  const remote = req.get("host").split(".")[0]; //google_com
-  const parsedRemote = parseURL(remote);
-  const ogURL = req.originalUrl;
+  const host = req.get("host").split(".").slice(-2).join("."); // f1shproxy.ml or vercel.app
+  const remote = req.get("host").split(".")[0]; //google_com or f1shproxy-q5qabpj09-vishy-dev or f1shproxy
+  const parsedRemote = parseURL(remote); //google.com
+  const ogURL = req.originalUrl; // path after host such as /waffle?q=21
 
   plog("host", host);
   plog("remote", remote);
@@ -31,6 +31,7 @@ app.use("*", (req, res) => {
   plog("ogURL", ogURL);
   plog("headers", req.headers);
   plog("fetchurl", `${req.protocol}://${parsedRemote}${ogURL}`);
+  plog("hosts", hosts);
 
   if (remote == host.split(".")[0]) return resolvers.browser(req, res);
   if (remote == "browser") return resolvers.browser(req, res);

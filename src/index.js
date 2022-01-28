@@ -1,7 +1,13 @@
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
-const { log, cleanReqHeaders, cleanResHeaders, parseURL } = require("./util");
+const {
+  log,
+  cleanReqHeaders,
+  cleanResHeaders,
+  parseURL,
+  cleanGeneralHeaders,
+} = require("./util");
 
 app.use(require("cors")());
 
@@ -59,22 +65,20 @@ app.use("*", (req, res) => {
 });
 
 const followFetch = async (url, res, config) => {
+  log(url, "followFetch URL");
   const r = await fetch(url, { ...config, redirect: "manual" });
 
   if ((r.status === 302 || r.status === 301) && r.headers.get("location"))
     return await followFetch(r.headers.get("location"), res, {
       ...config,
       headers: {
-        ...config.headers,
+        ...cleanGeneralHeaders(config.headers),
         host: r.headers.get("location").split("/")[2],
       },
     });
 
-  let headers = cleanResHeaders(Object.fromEntries(r.headers.entries()));
-  if (headers["content-length"] && headers["transfer-encoding"])
-    delete headers["content-length"];
-
-  res.set(headers);
+  const headers = cleanGeneralHeaders(Object.fromEntries(r.headers.entries()));
+  res.set(cleanResHeaders(headers));
   const body = await r.blob();
   res.type(body.type);
   body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));

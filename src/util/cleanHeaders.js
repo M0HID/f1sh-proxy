@@ -20,4 +20,11 @@ const cleanResHeaders = (headers) => {
   return hd;
 };
 
-module.exports = { cleanReqHeaders, cleanResHeaders };
+const cleanGeneralHeaders = (headers) => {
+  let hd = cleanResHeaders(Object.fromEntries(hd));
+  if (hd["content-length"] && hd["transfer-encoding"])
+    delete hd["content-length"];
+  return hd;
+};
+
+module.exports = { cleanReqHeaders, cleanResHeaders, cleanGeneralHeaders };

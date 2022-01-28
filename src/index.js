@@ -38,9 +38,7 @@ app.use("*", (req, res) => {
   let headers = cleanReqHeaders(req.headers);
 
   headers.origin &&
-    (headers.origin = fixedOrigin
-      ? parseURL(ogURL.split("/")[0])
-      : parsedRemote);
+    (headers.origin = fixedOrigin ? parseURL(ogURL.split("/")[0]) : remoteHref);
   headers.referer && (headers.referer = `${remoteHref}${ogURL}`);
   headers.host = parsedRemote;
 

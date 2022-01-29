@@ -184,15 +184,15 @@ function rewriteUrl(str = "", origin = "") {
   return origin + corrosion.prefix + corrosion.codec.encode(str);
 }
 
-export default async (req, res) => {
-  await fastify.ready();
-  fastify.server.emit("request", req, res);
-};
+// export default async (req, res) => {
+//   await fastify.ready();
+//   fastify.server.emit("request", req, res);
+// };
 
-/* fastify.listen(process.env.PORT || config.port, "0.0.0.0", (err, address) => {
+fastify.listen(process.env.PORT || config.port, "0.0.0.0", (err, address) => {
   if (err) {
     throw err;
   } else {
     console.log(`Incognito running on ${address}`);
   }
-}); */
+});

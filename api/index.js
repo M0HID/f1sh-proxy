@@ -122,7 +122,7 @@ fastify.register(require("fastify-static"), {
 
 function render(data = {}) {
   return fs
-    .readFileSync("src/template.html", "utf8")
+    .readFileSync("api/template.html", "utf8")
     .replace(
       /\$(theme|engine|main|head|bottom|id)/g,
       (str) => data[str.slice(1)] || ""

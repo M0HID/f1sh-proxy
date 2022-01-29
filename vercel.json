@@ -1,8 +1,8 @@
 {
     "version": 2,
     "functions": {
-        "src/index.js": {
-            "includeFiles": "src/**"
+        "api/index.js": {
+            "includeFiles": "api/**"
         }
     }
 }

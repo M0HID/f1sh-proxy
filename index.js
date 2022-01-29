@@ -125,13 +125,13 @@ fastify.register(require("fastify-static"), {
   prefix: "/",
 });
 
-fastify.listen(process.env.PORT || config.port, "0.0.0.0", (err, address) => {
-  if (err) {
-    throw err;
-  } else {
-    console.log(`Incognito running on ${address}`);
-  }
-});
+// fastify.listen(process.env.PORT || config.port, "0.0.0.0", (err, address) => {
+//   if (err) {
+//     throw err;
+//   } else {
+//     console.log(`Incognito running on ${address}`);
+//   }
+// });
 
 function render(data = {}) {
   return fs
@@ -196,3 +196,8 @@ function parseCookies(str = "") {
 function rewriteUrl(str = "", origin = "") {
   return origin + corrosion.prefix + corrosion.codec.encode(str);
 }
+
+export default async (req, res) => {
+  await fastify.ready();
+  fastify.server.emit("request", req, res);
+};

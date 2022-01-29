@@ -1,0 +1,11 @@
+{
+  "port": 8080,
+  "ssl": false,
+  "prefix": "/service/",
+  "codec": "xor",
+  "proxy": true,
+  "blacklist": [],
+  "addresses": [],
+  "appearance": "terminal",
+  "engine": "google"
+}

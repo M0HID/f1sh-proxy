@@ -1,10 +1,10 @@
 const { join } = require("path");
 const app = require("express")();
 const fetch = require("node-fetch");
+const { CookieJar } = require("cookiejar");
 const {
   log,
   cleanReqHeaders,
-  cleanResHeaders,
   parseURL,
   cleanGeneralHeaders,
 } = require("./util");
@@ -59,7 +59,8 @@ app.use("*", (req, res) => {
     log(fixedOrigin, "fixedOrigin");
     log(headers, "sending headers");
 
-    return followFetch(`${remoteHref}${ogURL}`, res, {
+    const jar = new CookieJar();
+    return followFetch(`${remoteHref}${ogURL}`, res, jar, {
       method: req.method,
       headers,
       body: req.body || null,
@@ -70,23 +71,38 @@ app.use("*", (req, res) => {
   }
 });
 
-const followFetch = async (url, res, config) => {
+const followFetch = async (url, res, jar, config) => {
   log(url, "followFetch URL");
   const r = await fetch(url, { ...config, redirect: "manual" });
 
-  if ((r.status === 302 || r.status === 301) && r.headers.get("location"))
-    return await followFetch(r.headers.get("location"), res, {
+  if ((r.status === 302 || r.status === 301) && r.headers.get("location")) {
+    if (r.headers.has("set-cookie")) {
+      log(r.headers.get("set-cookie"), "set-cookie");
+      log(url.split("/")[2], "urlsc");
+      jar.setCookies(
+        r.headers.get("set-cookie"),
+        url.split("/")[2],
+        url.split("/")[3] || "/"
+      );
+    }
+
+    return await followFetch(r.headers.get("location"), res, jar, {
       ...config,
       headers: {
-        ...cleanGeneralHeaders(config.headers),
+        ...config.headers,
         host: r.headers.get("location").split("/")[2],
+        cookie: jar.getCookies().toValueString(),
       },
     });
+  }
 
   res.set(cleanGeneralHeaders(Object.fromEntries(r.headers.entries())));
   const body = await r.blob();
   res.type(body.type);
   body.arrayBuffer().then((buf) => res.send(Buffer.from(buf)));
+  console.log("\n");
 };
 
 module.exports = app;
+
+// app.listen(80);

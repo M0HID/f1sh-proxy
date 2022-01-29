@@ -1,7 +1,8 @@
 const cleanReqHeaders = (headers) => {
   let hd = headers;
   Object.keys(headers).forEach((h) => {
-    (h.startsWith("x-") || h.startsWith("content-")) && delete headers[h];
+    (h.startsWith("x-") || h.startsWith("X-") || h.startsWith("content-")) &&
+      delete headers[h];
   });
   return hd;
 };
@@ -14,7 +15,10 @@ const cleanResHeaders = (headers) => {
   ];
 
   Object.keys(headers).forEach((h) => {
-    (h.startsWith("x-") || h.startsWith("content-") || filter.includes(h)) &&
+    (h.startsWith("x-") ||
+      h.startsWith("X-") ||
+      h.startsWith("content-") ||
+      filter.includes(h)) &&
       delete headers[h];
   });
   return hd;

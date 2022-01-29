@@ -26,13 +26,13 @@
 //   .then((r) => console.log(r));
 
 const fetch = require("node-fetch");
-fetch("https://google.com/", {
+fetch("https://www.webtoons.com/", {
   headers: {
-    host: "google.com",
+    host: "www.webtoons.com",
     "sec-ch-ua-mobile": "?0",
     "sec-fetch-site": "same-site",
     "sec-fetch-dest": "iframe",
-    referer: "https://google.com/",
+    referer: "https://www.webtoons.com/",
     "sec-ch-ua":
       '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
     "sec-ch-ua-platform": '"macOS"',
@@ -47,6 +47,7 @@ fetch("https://google.com/", {
     connection: "close",
   },
   redirect: "manual",
+  follow: 5,
 })
   .then((r) => {
     console.log(r);

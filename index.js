@@ -2,7 +2,12 @@ const fs = require("fs");
 const config = require("./config.json");
 const fastify = require("fastify")({
   ignoreTrailingSlash: true,
-  https: false,
+  https: config.ssl
+    ? {
+        cert: fs.readFileSync("./ssl.cert", "utf-8"),
+        key: fs.readFileSync("./ssl.key", "utf-8"),
+      }
+    : false,
 });
 const Corrosion = require("corrosion");
 const https = require("https");

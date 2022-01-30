@@ -2,12 +2,13 @@ const fs = require("fs");
 const config = require("./config.json");
 const fastify = require("fastify")({
   ignoreTrailingSlash: true,
-  https: config.ssl
-    ? {
-        cert: fs.readFileSync("./ssl.cert", "utf-8"),
-        key: fs.readFileSync("./ssl.key", "utf-8"),
-      }
-    : false,
+  // https: config.ssl
+  //   ? {
+  //       cert: fs.readFileSync("./ssl.cert", "utf-8"),
+  //       key: fs.readFileSync("./ssl.key", "utf-8"),
+  //     }
+  //   : false,
+  https: false,
 });
 const Corrosion = require("corrosion");
 const https = require("https");
@@ -194,7 +195,7 @@ function rewriteUrl(str = "", origin = "") {
 //   fastify.server.emit("request", req, res);
 // };
 
-fastify.listen(process.env.PORT || 8000, "0.0.0.0", (err, address) => {
+fastify.listen(process.env.PORT || 8080, "0.0.0.0", (err, address) => {
   if (err) {
     throw err;
   } else {

@@ -194,7 +194,7 @@ function rewriteUrl(str = "", origin = "") {
 //   fastify.server.emit("request", req, res);
 // };
 
-fastify.listen(process.env.PORT || config.port, "0.0.0.0", (err, address) => {
+fastify.listen(process.env.PORT || 8000, "0.0.0.0", (err, address) => {
   if (err) {
     throw err;
   } else {
